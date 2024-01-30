@@ -1,14 +1,19 @@
-import './App.css'
-// import { useState } from 'react'
+import "./App.css";
+import ButtonCounter from "./components/ButtonCounter";
+import Formulario from "./components/Formulario";
+import ListadoPacientes from "./components/ListadoPacientes";
 
 function App() {
-  // const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <h1>Hola mundo!</h1>
-    </>
-  )
+    return (
+        <>
+			<h1 className="text-4xl font-bold">Hola mundo!</h1>
+			
+			<ButtonCounter />
+			<Formulario />
+			<ListadoPacientes />
+			
+        </>
+    );
 }
 
-export default App
+export default App;
