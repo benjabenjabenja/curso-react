@@ -10,14 +10,16 @@ const Formulario = ({ setPacientes, pacientes, paciente }) => {
     const [nombre, setNombre] = useState('');
     const [contacto, setContacto] = useState('');
     const [email, setEmail] = useState('');
-    const [fecha_alta, setFecha_alta] = useState('');
+    const [fecha_alta, setFechaAlta] = useState('');
     const [sintomas, setSintomas] = useState('');
 
     const [showAlert, setShowAlert] = useState(false);
 
     useEffect(
         () => {
-            paciente && setPaciente(paciente);
+            if (Object.keys(paciente).length > 0) {
+                setPaciente(paciente);
+            }
         }, [paciente]
     );
     useEffect(
@@ -29,7 +31,7 @@ const Formulario = ({ setPacientes, pacientes, paciente }) => {
         setNombre(paciente.nombre);
         setContacto(paciente.contacto);
         setEmail(paciente.email);
-        setFecha_alta(paciente.fecha_alta);
+        setFechaAlta(paciente.fecha_alta);
         setSintomas(paciente.sintomas);
     }
     const title = 'Seguimiento de Pacientes';
@@ -40,7 +42,7 @@ const Formulario = ({ setPacientes, pacientes, paciente }) => {
         setNombre('');
         setContacto('');
         setEmail('');
-        setFecha_alta('');
+        setFechaAlta('');
         setSintomas('');
 
         setShowAlert(false);
@@ -60,9 +62,20 @@ const Formulario = ({ setPacientes, pacientes, paciente }) => {
             return;
         }
         showAlert && setShowAlert(false);
-        const paciente = { nombre, contacto, email, fecha_alta, sintomas, id: uniqueId }
-        setPacientes([...pacientes, paciente]);
-        setTimeout(() => resetForm(), 0);
+
+        const obj = { nombre, contacto, email, fecha_alta, sintomas }
+        if (paciente && paciente.id) {
+            obj.id = paciente.id;
+
+            const pUpdated = pacientes.map(
+                p => p.id === paciente.id ? obj : p 
+            );
+            setPacientes(pUpdated);
+        } else {
+            obj.id = uniqueId;
+            setPacientes([...pacientes, obj]);
+        }
+        setTimeout(resetForm, 0);
     }
 
     return (
@@ -129,7 +142,7 @@ const Formulario = ({ setPacientes, pacientes, paciente }) => {
                         placeholder="Fecha de alta"
                         className="border-2 rounded-md w-full p-2 placeholder-gray-400"
                         value={fecha_alta}
-                        onChange={(ev) => setFecha_alta(ev?.target?.value)}
+                        onChange={(ev) => setFechaAlta(ev?.target?.value)}
                     />
                 </div>
 
@@ -148,8 +161,9 @@ const Formulario = ({ setPacientes, pacientes, paciente }) => {
                 <input
                     type="submit"
                     className="bg-indigo-300 p-3 w-full text-white rounded-md hover:bg-indigo-100"
-                    value={button_send_text}
-                />
+                    value={paciente && paciente.id ? 'Confiramr edicion' : button_send_text}
+                />     
+
                 
             </form>
         </div>
