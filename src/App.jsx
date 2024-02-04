@@ -11,11 +11,11 @@ function App() {
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem('data'));
         setPacientes(data || []);
-    }, []);
+    }, []);// sin dependecias se ejecuta una vez el componente este listo
     
     useEffect(() => {
         localStorage.setItem('data', JSON.stringify(pacientes));
-    }, [pacientes]);
+    }, [pacientes]);// se ejecuta con cada cambio de lo que le pases en el array
     
     const deletePaciente = (id) => { 
         setPacientes(pacientes.filter(v => v.id === id));
